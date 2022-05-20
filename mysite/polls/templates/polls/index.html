@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 
+<h2>Answer to polls:</h2>
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
@@ -29,3 +30,14 @@
     {% csrf_token %}
     <input type="submit" value="Logout"/>
 </form>
+
+<form action='login/' method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Log in"/>
+</form>
+
+<form action='register/' method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Register new user"/>
+</form>
+
