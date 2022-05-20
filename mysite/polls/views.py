@@ -1,8 +1,13 @@
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from .models import Choice, Question
+from .models import Choice, Question, Comment
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
+from django.contrib import messages
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+import sqlite3
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -11,14 +16,17 @@ def index(request):
     }
     return render(request, 'polls/index.html', context)
 
+@login_required
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/detail.html', {'question': question})
 
+@login_required
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/results.html', {'question': question})
 
+@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
    
@@ -35,3 +43,34 @@ def vote(request, question_id):
         selected_choice.save()
         
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('polls:index')
+    else:
+        form = UserCreationForm
+
+    return render(request, 'register/register.html', {'form': form})       
+
+def logout(request):
+    logout(request)
+    return redirect('/accounts/login')
+
+@login_required
+def comment(request):
+    if request.method == 'POST':
+        comment = request.POST.get("Comment", "")
+        conn = sqlite3.connect('db.sqlite3')
+        cur = conn.cursor()
+        sql = ("INSERT INTO polls_comment VALUES ('1', '" + str(comment) + "')")
+        cur.execute(sql)
+        messages.success(request, "your message has been saved")
+    return redirect('polls:index') 
