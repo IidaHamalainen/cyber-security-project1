@@ -67,10 +67,11 @@ def logout(request):
 @login_required
 def comment(request):
     if request.method == 'POST':
-        comment = request.POST.get("Comment", "")
+        c = request.POST.get("Comment", "")
         conn = sqlite3.connect('db.sqlite3')
         cur = conn.cursor()
-        sql = ("INSERT INTO polls_comment VALUES ('1', '" + str(comment) + "')")
+        sql = ("INSERT INTO polls_comment(comment) VALUES ('"+str(c)+"')")
         cur.execute(sql)
+        conn.commit()
         messages.success(request, "your message has been saved")
     return redirect('polls:index') 
