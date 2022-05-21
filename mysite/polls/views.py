@@ -7,11 +7,12 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 import sqlite3
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    latest_comment_list = Comment.objects.order_by('pub_date')[:10]
+    latest_comment_list = Comment.objects.order_by('pub_date')[:20]
     context = {
         'latest_question_list': latest_question_list,
         'latest_comment_list': latest_comment_list,
@@ -68,6 +69,7 @@ def logout(request):
     return redirect('/accounts/login')
 
 @login_required
+@csrf_exempt
 def comment(request):
     if request.method == 'POST':
         c = request.POST.get("Comment", "")
