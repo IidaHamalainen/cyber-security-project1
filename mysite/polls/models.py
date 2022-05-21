@@ -23,6 +23,6 @@ class Choice(models.Model):
 class Comment(models.Model):
     
     comment = models.CharField(max_length=500)
-    pub_date = models.DateTimeField(default=datetime.now)
+    pub_date = models.DateTimeField(default=datetime.now, null=True)
     def __str__(self):
         return self.comment
