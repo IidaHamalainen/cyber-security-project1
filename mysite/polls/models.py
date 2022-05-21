@@ -1,4 +1,5 @@
 import datetime
+from datetime import datetime  
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -20,7 +21,8 @@ class Choice(models.Model):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
 class Comment(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    
     comment = models.CharField(max_length=500)
+    pub_date = models.DateTimeField(default=datetime.now)
     def __str__(self):
         return self.comment

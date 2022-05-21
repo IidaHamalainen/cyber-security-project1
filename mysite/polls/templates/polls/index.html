@@ -41,3 +41,13 @@
     <input type="submit" value="Register new user"/>
 </form>
 
+<h3>Latest comments:</h3>
+{% if latest_comment_list %}
+    <ul>
+    {% for comment in latest_comment_list %}
+        <li>{{ comment.comment }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No comments are send.</p>
+{% endif %}

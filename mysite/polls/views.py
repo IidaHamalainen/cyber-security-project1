@@ -11,8 +11,10 @@ import sqlite3
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    latest_comment_list = Comment.objects.order_by('-pub_date')[:5]
     context = {
         'latest_question_list': latest_question_list,
+        'latest_comment_list': latest_comment_list,
     }
     return render(request, 'polls/index.html', context)
 
