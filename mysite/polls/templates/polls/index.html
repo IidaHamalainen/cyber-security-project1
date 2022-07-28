@@ -44,9 +44,14 @@
 <h3>Latest comments:</h3>
 {% if latest_comment_list %}
     <ul>
+      
     {% for comment in latest_comment_list %}
+    <!-- https://docs.djangoproject.com/en/3.1/ref/templates/language/#automatic-html-escaping -->
+        {% autoescape off %}  
         <li>{{ comment.comment }}</li>
+        {% endautoescape %} 
     {% endfor %}
+       
     </ul>
 {% else %}
     <p>No comments are send.</p>

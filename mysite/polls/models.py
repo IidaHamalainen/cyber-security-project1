@@ -26,3 +26,4 @@ class Comment(models.Model):
     pub_date = models.DateTimeField(default=datetime.now, null=True)
     def __str__(self):
         return self.comment
+

@@ -12,7 +12,7 @@ import sqlite3
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    latest_comment_list = Comment.objects.order_by('pub_date')[:20]
+    latest_comment_list = Comment.objects.order_by('pub_date')[:200]
     context = {
         'latest_question_list': latest_question_list,
         'latest_comment_list': latest_comment_list,
@@ -80,3 +80,14 @@ def comment(request):
         conn.commit()
         messages.success(request, "your message has been saved")
     return redirect('polls:index') 
+
+#Fix to flaw 5 injection and partial fix flaw 4 by removing csrf_exempt:
+"""
+@login_required
+def comment(request):
+    comment = request.POST.get("Comment")
+    c = Comment(comment=comment)
+    c.save()
+    return redirect('polls:index')
+"""
+
